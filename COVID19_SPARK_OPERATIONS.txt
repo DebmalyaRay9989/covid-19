@@ -1,0 +1,321 @@
+COVID 19 SPARK OPERATIONS
+=========================
+
+/user/edureka_918210/Deb_DataSets/COVID19_DataSet
+=================================================
+
+[edureka_918210@ip-20-0-41-164 ~]$ hadoop fs -ls /user/edureka_918210/Deb_DataSets/COVID19_DataSet
+Found 6 items
+-rw-r--r--   3 edureka_918210 hadoop    1109964 2020-07-28 03:39 /user/edureka_918210/Deb_DataSets/COVID19_DataSet/countries-aggregated.csv
+-rw-r--r--   3 edureka_918210 hadoop      11006 2020-07-28 03:39 /user/edureka_918210/Deb_DataSets/COVID19_DataSet/key-countries-pivoted.csv
+-rw-r--r--   3 edureka_918210 hadoop     403028 2020-07-28 03:40 /user/edureka_918210/Deb_DataSets/COVID19_DataSet/reference.csv
+-rw-r--r--   3 edureka_918210 hadoop   70182395 2020-07-28 03:48 /user/edureka_918210/Deb_DataSets/COVID19_DataSet/us_confirmed.csv
+-rw-r--r--   3 edureka_918210 hadoop   73477670 2020-07-28 04:12 /user/edureka_918210/Deb_DataSets/COVID19_DataSet/us_deaths.csv
+-rw-r--r--   3 edureka_918210 hadoop       9566 2020-07-28 03:43 /user/edureka_918210/Deb_DataSets/COVID19_DataSet/worldwide-aggregated.csv
+
+
+
+var myDF_COVID1=spark.read.format("csv").option("delimiter",",").option("header","false").option("inferSchema","true").load("/user/edureka_918210/Deb_DataSets/COVID19_DataSet/countries-aggregated.csv").toDF("DATE","COUNTRY","CONFIRMED","RECOVERED","DEATHS")
+
+var myDF_COVID2=spark.read.format("csv").option("delimiter",",").option("header","false").option("inferSchema","true").load("/user/edureka_918210/Deb_DataSets/COVID19_DataSet/key-countries-pivoted.csv").toDF("DATE","CHINA","US","UNITED_KINGDOM","ITALY","FRANCE","GERMANY","SPAIN","IRAN")
+
+
+var myDF_COVID3=spark.read.format("csv").option("delimiter",",").option("header","false").option("inferSchema","true").load("/user/edureka_918210/Deb_DataSets/COVID19_DataSet/reference.csv").toDF("UID","iso2","iso3","code3","FIPS","Admin2","Province_State","Country_Region","Lat","Long_","Combined_Key","Population")
+
+
+var myDF_COVID4=spark.read.format("csv").option("delimiter",",").option("header","false").option("inferSchema","true").load("/user/edureka_918210/Deb_DataSets/COVID19_DataSet/us_confirmed.csv").toDF("UID","iso2","iso3","code3","FIPS","Admin2","Lat","Combined_Key","Date","Case","Long","Country/Region","Province/State")
+
+
+var myDF_COVID5=spark.read.format("csv").option("delimiter",",").option("header","false").option("inferSchema","true").load("/user/edureka_918210/Deb_DataSets/COVID19_DataSet/us_deaths.csv").toDF("UID","iso2","iso3","code3","FIPS","Admin2","Lat","Combined_Key","Population","Date","Case","Long","Country/Region","Province/State")
+
+
+var myDF_COVID6=spark.read.format("csv").option("delimiter",",").option("header","false").option("inferSchema","true").load("/user/edureka_918210/Deb_DataSets/COVID19_DataSet/worldwide-aggregated.csv").toDF("Date","Confirmed","Recovered","Deaths","Increase_rate")
+
+
+
+myDF_COVID1.show(false)
+myDF_COVID2.show(false)
+myDF_COVID3.show(false)
+myDF_COVID4.show(false)
+myDF_COVID5.show(false)
+myDF_COVID6.show(false)
+
+
+
+
+scala> myDF_COVID1.show(false)
++----------+-------------------+---------+---------+------+
+|DATE      |COUNTRY            |CONFIRMED|RECOVERED|DEATHS|
++----------+-------------------+---------+---------+------+
+|Date      |Country            |Confirmed|Recovered|Deaths|
+|2020-02-06|30802    |1487     |634   |11.427847918098614|
+|2020-01-22|Afghanistan        |0        |0        |0     |
+|2020-01-22|Albania            |0        |0        |0     |
+|2020-01-22|Algeria            |0        |0        |0     |
+|2020-01-22|Andorra            |0        |0        |0     |
+|2020-01-22|Angola             |0        |0        |0     |
+|2020-01-22|Antigua and Barbuda|0        |0        |0     |
+|2020-01-22|Argentina          |0        |0        |0     |
+|2020-01-22|Armenia            |0        |0        |0     |
+|2020-01-22|Australia          |0        |0        |0     |
+|2020-01-22|Austria            |0        |0        |0     |
+|2020-01-22|Azerbaijan         |0        |0        |0     |
+|2020-01-22|Bahamas            |0        |0        |0     |
+|2020-01-22|Bahrain            |0        |0        |0     |
+|2020-01-22|Bangladesh         |0        |0        |0     |
+|2020-01-22|Barbados           |0        |0        |0     |
+|2020-01-22|Belarus            |0        |0        |0     |
+|2020-01-22|Belgium            |0        |0        |0     |
+|2020-01-22|Belize             |0        |0        |0     |
+|2020-01-22|Benin              |0        |0        |0     |
++----------+-------------------+---------+---------+------+
+only showing top 20 rows
+
+
+scala> myDF_COVID2.show(false)
++----------+-----+---+--------------+-----+------+-------+-----+----+
+|DATE      |CHINA|US |UNITED_KINGDOM|ITALY|FRANCE|GERMANY|SPAIN|IRAN|
++----------+-----+---+--------------+-----+------+-------+-----+----+
+|Date      |China|US |United_Kingdom|Italy|France|Germany|Spain|Iran|
+|2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-23|643  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-24|920  |2  |0             |0    |2     |0      |0    |0   |
+|2020-01-25|1406 |2  |0             |0    |3     |0      |0    |0   |
+|2020-01-26|2075 |5  |0             |0    |3     |0      |0    |0   |
+|2020-01-27|2877 |5  |0             |0    |3     |1      |0    |0   |
+|2020-01-28|5509 |5  |0             |0    |4     |4      |0    |0   |
+|2020-01-29|6087 |5  |0             |0    |5     |4      |0    |0   |
+|2020-01-30|8141 |5  |0             |0    |5     |4      |0    |0   |
+|2020-01-31|9802 |7  |2             |2    |5     |5      |0    |0   |
+|2020-02-01|11891|8  |2             |2    |6     |8      |1    |0   |
+|2020-02-02|16630|8  |2             |2    |6     |10     |1    |0   |
+|2020-02-03|19716|11 |8             |2    |6     |12     |1    |0   |
+|2020-02-04|23707|11 |8             |2    |6     |12     |1    |0   |
+|2020-02-05|27440|11 |9             |2    |6     |12     |1    |0   |
+|2020-02-06|30587|11 |9             |2    |6     |12     |1    |0   |
+|2020-02-07|34110|11 |9             |3    |6     |13     |1    |0   |
+|2020-02-08|36814|11 |13            |3    |11    |13     |1    |0   |
+|2020-02-09|39829|11 |14            |3    |11    |14     |2    |0   |
++----------+-----+---+--------------+-----+------+-------+-----+----+
+only showing top 20 rows
+
+scala> myDF_COVID3.show(false)
++---+----+----+-----+----+------+--------------+-------------------+---------+----------+-------------------+----------+
+|UID|iso2|iso3|code3|FIPS|Admin2|Province_State|Country_Region     |Lat      |Long_     |Combined_Key       |Population|
++---+----+----+-----+----+------+--------------+-------------------+---------+----------+-------------------+----------+
+|UID|iso2|iso3|code3|FIPS|Admin2|Province_State|Country_Region     |Lat      |Long_     |Combined_Key       |Population|
+|4  |AF  |AFG |4    |null|null  |null          |Afghanistan        |33.93911 |67.709953 |Afghanistan        |38928341  |
+|8  |AL  |ALB |8    |null|null  |null          |Albania            |41.1533  |20.1683   |Albania            |2877800   |
+|12 |DZ  |DZA |12   |null|null  |null          |Algeria            |28.0339  |1.6596    |Algeria            |43851043  |
+|20 |AD  |AND |20   |null|null  |null          |Andorra            |42.5063  |1.5218    |Andorra            |77265     |
+|24 |AO  |AGO |24   |null|null  |null          |Angola             |-11.2027 |17.8739   |Angola             |32866268  |
+|28 |AG  |ATG |28   |null|null  |null          |Antigua and Barbuda|17.0608  |-61.7964  |Antigua and Barbuda|97928     |
+|32 |AR  |ARG |32   |null|null  |null          |Argentina          |-38.4161 |-63.6167  |Argentina          |45195777  |
+|51 |AM  |ARM |51   |null|null  |null          |Armenia            |40.0691  |45.0382   |Armenia            |2963234   |
+|40 |AT  |AUT |40   |null|null  |null          |Austria            |47.5162  |14.5501   |Austria            |9006400   |
+|31 |AZ  |AZE |31   |null|null  |null          |Azerbaijan         |40.1431  |47.5769   |Azerbaijan         |10139175  |
+|44 |BS  |BHS |44   |null|null  |null          |Bahamas            |25.025885|-78.035889|Bahamas            |393248    |
+|48 |BH  |BHR |48   |null|null  |null          |Bahrain            |26.0275  |50.55     |Bahrain            |1701583   |
+|50 |BD  |BGD |50   |null|null  |null          |Bangladesh         |23.685   |90.3563   |Bangladesh         |164689383 |
+|52 |BB  |BRB |52   |null|null  |null          |Barbados           |13.1939  |-59.5432  |Barbados           |287371    |
+|112|BY  |BLR |112  |null|null  |null          |Belarus            |53.7098  |27.9534   |Belarus            |9449321   |
+|56 |BE  |BEL |56   |null|null  |null          |Belgium            |50.8333  |4.469936  |Belgium            |11589616  |
+|84 |BZ  |BLZ |84   |null|null  |null          |Belize             |17.1899  |-88.4976  |Belize             |397621    |
+|204|BJ  |BEN |204  |null|null  |null          |Benin              |9.3077   |2.3158    |Benin              |12123198  |
+|64 |BT  |BTN |64   |null|null  |null          |Bhutan             |27.5142  |90.4336   |Bhutan             |771612    |
++---+----+----+-----+----+------+--------------+-------------------+---------+----------+-------------------+----------+
+only showing top 20 rows
+
+
+scala> myDF_COVID4.show(false)
+|32 |AR  |ARG |32   |null|null  |null          |Argentina          |-38.4161 |-63.6167  |Argentina          |45195777  |
++---+----+----+-----+----+------+-------------------+------------------+----------+----+--------+--------------+--------------+
+|UID|iso2|iso3|code3|FIPS|Admin2|Lat                |Combined_Key      |Date      |Case|Long    |Country/Region|Province/State|
++---+----+----+-----+----+------+-------------------+------------------+----------+----+--------+--------------+--------------+
+|UID|iso2|iso3|code3|FIPS|Admin2|Lat                |Combined_Key      |Date      |Case|Long    |Country/Region|Province/State|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-22|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-23|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-24|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-25|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-26|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-27|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-28|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-29|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-30|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-01-31|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-01|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-02|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-03|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-04|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-05|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-06|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-07|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-08|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|2020-02-09|0   |-170.132|US            |American Samoa|
++---+----+----+-----+----+------+-------------------+------------------+----------+----+--------+--------------+--------------+
+only showing top 20 rows
+
+
+
+
+scala> myDF_COVID5.show(false)
++---+----+----+-----+----+------+-------------------+------------------+----------+----------+----+--------+--------------+--------------+
+|UID|iso2|iso3|code3|FIPS|Admin2|Lat                |Combined_Key      |Population|Date      |Case|Long    |Country/Region|Province/State|
++---+----+----+-----+----+------+-------------------+------------------+----------+----------+----+--------+--------------+--------------+
+|UID|iso2|iso3|code3|FIPS|Admin2|Lat                |Combined_Key      |Population|Date      |Case|Long    |Country/Region|Province/State|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-22|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-23|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-24|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-25|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-26|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-27|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-28|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-29|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-30|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-01-31|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-01|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-02|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-03|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-04|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-05|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-06|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-07|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-08|0   |-170.132|US            |American Samoa|
+|16 |AS  |ASM |16   |60.0|null  |-14.270999999999999|American Samoa, US|55641     |2020-02-09|0   |-170.132|US            |American Samoa|
++---+----+----+-----+----+------+-------------------+------------------+----------+----------+----+--------+--------------+--------------+
+only showing top 20 rows
+
+
+scala> myDF_COVID6.show(false)
+
+
++----------+---------+---------+------+------------------+
+|Date      |Confirmed|Recovered|Deaths|Increase_rate     |
++----------+---------+---------+------+------------------+
+|Date      |Confirmed|Recovered|Deaths|Increase rate     |
+|2020-01-22|555      |28       |17    |null              |
+|2020-01-23|654      |30       |18    |17.83783783783784 |
+|2020-01-24|941      |36       |26    |43.883792048929664|
+|2020-01-25|1434     |39       |42    |52.39107332624867 |
+|2020-01-26|2118     |52       |56    |47.69874476987448 |
+|2020-01-27|2927     |61       |82    |38.196411709159584|
+|2020-01-28|5578     |107      |131   |90.57055005124701 |
+|2020-01-29|6166     |126      |133   |10.541412692721405|
+|2020-01-30|8234     |143      |171   |33.53876094712942 |
+|2020-01-31|9927     |222      |213   |20.5610881709983  |
+|2020-02-01|12038    |284      |259   |21.2652362244384  |
+|2020-02-02|16787    |472      |362   |39.45007476324971 |
+|2020-02-03|19887    |623      |426   |18.466670637993683|
+|2020-02-04|23898    |852      |492   |20.16895459345301 |
+|2020-02-05|27643    |1124     |564   |15.670767428236672|
+|2020-02-06|30802    |1487     |634   |11.427847918098614|
+|2020-02-07|34395    |2011     |719   |11.664826959288357|
+|2020-02-08|37129    |2616     |806   |7.948829771769153 |
+|2020-02-09|40159    |3244     |906   |8.160736890301381 |
++----------+---------+---------+------+------------------+
+only showing top 20 rows
+
+===============================================================================================================================================================================
+
+myDF_COVID1.show(false)
+myDF_COVID2.show(false)
+myDF_COVID3.show(false)
+myDF_COVID4.show(false)
+myDF_COVID5.show(false)
+myDF_COVID6.show(false)
+
+myDF_COVID1.select("DATE").intersect(myDF_COVID2.select("DATE")).show
+
+myDF_COVID1.join(myDF_COVID2,myDF_COVID1.col("DATE")===myDF_COVID2.col("DATE")).show(false)
+
++----------+-------------------+---------+---------+------+----------+-----+---+--------------+-----+------+-------+-----+----+
+|DATE      |COUNTRY            |CONFIRMED|RECOVERED|DEATHS|DATE      |CHINA|US |UNITED_KINGDOM|ITALY|FRANCE|GERMANY|SPAIN|IRAN|
++----------+-------------------+---------+---------+------+----------+-----+---+--------------+-----+------+-------+-----+----+
+|Date      |Country            |Confirmed|Recovered|Deaths|Date      |China|US |United_Kingdom|Italy|France|Germany|Spain|Iran|
+|2020-01-22|Afghanistan        |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Albania            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Algeria            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Andorra            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Angola             |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Antigua and Barbuda|0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Argentina          |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Armenia            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Australia          |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Austria            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Azerbaijan         |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Bahamas            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Bahrain            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Bangladesh         |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Barbados           |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Belarus            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Belgium            |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Belize             |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
+|2020-01-22|Benin              |0        |0        |0     |2020-01-22|548  |1  |0             |0    |0     |0      |0    |0   |
++----------+-------------------+---------+---------+------+----------+-----+---+--------------+-----+------+-------+-----+----+
+only showing top 20 rows
+
+
+========================================================================================================
+
+myDF_COVID1.join(myDF_COVID6,myDF_COVID1.col("DATE")===myDF_COVID6.col("DATE")).show(false)
+
+
+========================================================================================================
+
+myDF_COVID1.createOrReplaceTempView("countriesaggregated")
+myDF_COVID2.createOrReplaceTempView("keycountriespivoted")
+myDF_COVID3.createOrReplaceTempView("reference")
+myDF_COVID4.createOrReplaceTempView("usconfirmed")
+myDF_COVID5.createOrReplaceTempView("usdeaths")
+myDF_COVID6.createOrReplaceTempView("worldwideaggregated")
+
+
+spark.sql("select * from countriesaggregated").show
+spark.sql("select * from keycountriespivoted").show
+spark.sql("select * from reference").show
+spark.sql("select * from usconfirmed").show
+spark.sql("select * from usdeaths").show
+spark.sql("select * from countriesaggregated").show
+
+========================================================================================================
+spark.sql("select avg(Lat),avg(Long_) from reference group by iso2")show
+
++------------------------+--------------------------+
+|avg(CAST(Lat AS DOUBLE))|avg(CAST(Long_ AS DOUBLE))| ============================== due to inferschema
++------------------------+--------------------------+
+|                 28.0339|                    1.6596|
+|                 21.9162|                    95.956|
+|                 55.1694|                   23.8813|
+|                    7.54|                   -5.5471|
+|                  21.694|                  -71.7979|
+|                 40.1431|                   47.5769|
+|                61.92411|                 25.748151|
+|                 46.8852|                  -56.3159|
+|                 -4.6796|                    55.492|
+|       48.82878571428571|        30.794999999999998|
+|                 45.9432|                   24.9668|
+|              -13.133897|                 27.849332|
+|                8.460555|                -11.779889|
+|                19.85627|                102.495496|
+|        52.2484443076923|         5.528057230769231|
+|               25.025885|                -78.035889|
+|                -22.3285|                   24.6849|
+|                 46.8625|                  103.8467|
+|                 40.0691|                   45.0382|
+|                -21.1151|                   55.5364|
++------------------------+--------------------------+
+
+scala> myDF_COVID3.printSchema
+root
+ |-- UID: string (nullable = true)
+ |-- iso2: string (nullable = true)
+ |-- iso3: string (nullable = true)
+ |-- code3: string (nullable = true)
+ |-- FIPS: string (nullable = true)
+ |-- Admin2: string (nullable = true)
+ |-- Province_State: string (nullable = true)
+ |-- Country_Region: string (nullable = true)
+ |-- Lat: string (nullable = true)       ====================================== Inferschema
+ |-- Long_: string (nullable = true)
+ |-- Combined_Key: string (nullable = true)
+ |-- Population: string (nullable = true)
